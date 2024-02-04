@@ -12,7 +12,7 @@ function RegisterForm() {
     const step1 = useRef<HTMLHeadingElement>(null);
     const stepCompleted = useRef<HTMLElement>(null);
     const stepperItem2 = useRef<HTMLLIElement>(null);
-    const [addressData, setAddressData] = useState<string[]>([]);
+    const [addressData, setAddressData] = useState([]);
     const [chosenCity, setChosenCity] = useState('');
     const [_, setZipCode] = useState('');
     const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -54,13 +54,11 @@ function RegisterForm() {
     }
     useEffect(() => {
         (async () => {
-            const result = await axios.get('https://yoyo1021.github.io/hotel/assets/taiwan.json')
-            //console.log(result);
+            const result = await axios.get('src/assets/taiwan.json');
+            console.log(result);
             setAddressData(result.data);
         })();
     }, [])
-
-    console.log(addressData.find((city: any) => city.CityName === chosenCity))
 
     function nextStep() {
         formStep1.current?.classList.add('d-none');
