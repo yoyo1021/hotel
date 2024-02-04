@@ -1,0 +1,21 @@
+.l_login{
+    position: relative;
+    background-image: url('../assets/images/行動版/line.png');
+    background-repeat: no-repeat;
+    background-size:contain;
+    background-position-y:32px ;
+    display: flex;
+    align-items: center;
+    @media (min-width: 992px) {
+        background-image: url('../assets/images/桌機版/line3.png');
+        background-position-y:72px ;
+    }
+    .loginForm{
+        width: 100%;
+        padding:0 20px ;
+        @media (min-width: 992px){
+            width:50%;
+            margin: 0 auto;
+        }
+    }
+}
