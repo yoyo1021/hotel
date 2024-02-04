@@ -5,6 +5,7 @@ import axios from "axios";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import Loading from "./Loading";
 import Swal from 'sweetalert2';
+import taiwan from '../assets/taiwan.json'
 
 function RegisterForm() {
     const formStep1 = useRef<HTMLDivElement>(null);
@@ -12,7 +13,7 @@ function RegisterForm() {
     const step1 = useRef<HTMLHeadingElement>(null);
     const stepCompleted = useRef<HTMLElement>(null);
     const stepperItem2 = useRef<HTMLLIElement>(null);
-    const [addressData, setAddressData] = useState([]);
+    const [addressData, setAddressData] = useState(taiwan);
     const [chosenCity, setChosenCity] = useState('');
     const [_, setZipCode] = useState('');
     const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -52,13 +53,6 @@ function RegisterForm() {
         }
         setIsLoading(false);
     }
-    useEffect(() => {
-        (async () => {
-            const result = await axios.get('/src/assets/taiwan.json');
-            //console.log(result);
-            setAddressData(result.data);
-        })();
-    }, [])
 
     function nextStep() {
         formStep1.current?.classList.add('d-none');
@@ -176,7 +170,7 @@ function RegisterForm() {
                                         onChange={(e) => setChosenCity(e.target.value)}
                                     >
                                         <option value="">請選擇縣市</option>
-                                        {addressData.map((city: any) => {
+                                        {Object.values(addressData).map((city: any) => {
                                             return (
                                                 <option value={city['CityName']} key={city['CityEngName']}>{city['CityName']}</option>
                                             )
@@ -192,9 +186,9 @@ function RegisterForm() {
                                         onChange={(e) => setZipCode(e.target.value)}
                                     >
                                         <option value="">請選擇鄉鎮市區</option>
-                                        {/* {addressData.find((city: any) => city.CityName === chosenCity)?.AreaList.map((area: any) => {
+                                        {Object.values(addressData).find((city: any) => city.CityName === chosenCity)?.AreaList.map((area: any) => {
                                             return <option value={area.ZipCode} key={area.AreaName}>{area.AreaName}</option>
-                                        })} */}
+                                        })}
                                     </select>
                                     {errors.zipcode && (<div className='invalid-feedback mt-2'>{errors.zipcode?.message?.toString()}</div>)}
                                 </div>
