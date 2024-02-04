@@ -1,11 +1,11 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import Loading from "./Loading";
 import Swal from 'sweetalert2';
-import taiwan from '../assets/taiwan.json'
+// import taiwan from '';
 
 function RegisterForm() {
     const formStep1 = useRef<HTMLDivElement>(null);
@@ -13,7 +13,7 @@ function RegisterForm() {
     const step1 = useRef<HTMLHeadingElement>(null);
     const stepCompleted = useRef<HTMLElement>(null);
     const stepperItem2 = useRef<HTMLLIElement>(null);
-    const [addressData] = useState(taiwan);
+    const [addressData,setAddressData] = useState([]);
     const [chosenCity, setChosenCity] = useState('');
     const [_, setZipCode] = useState('');
     const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -53,6 +53,13 @@ function RegisterForm() {
         }
         setIsLoading(false);
     }
+
+    useEffect(()=>{
+        (async()=>{
+            const res = await axios.get('/taiwan.json');
+            setAddressData(res.data)
+        })()
+    },[])
 
     function nextStep() {
         formStep1.current?.classList.add('d-none');
@@ -186,9 +193,9 @@ function RegisterForm() {
                                         onChange={(e) => setZipCode(e.target.value)}
                                     >
                                         <option value="">請選擇鄉鎮市區</option>
-                                        {Object.values(addressData).find((city: any) => city.CityName === chosenCity)?.AreaList.map((area: any) => {
+                                        {/* {Object.values(addressData).find((city: any) => city.CityName === chosenCity)?.AreaList.map((area: any) => {
                                             return <option value={area.ZipCode} key={area.AreaName}>{area.AreaName}</option>
-                                        })}
+                                        })} */}
                                     </select>
                                     {errors.zipcode && (<div className='invalid-feedback mt-2'>{errors.zipcode?.message?.toString()}</div>)}
                                 </div>
