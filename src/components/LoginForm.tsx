@@ -15,17 +15,17 @@ function LoginForm() {
             email,
             password
         }
-        const res = await axios.post(`${ApiUrl}/api/v1/user/login`, formData);
-        const status = res.data;
+        
         setIsLoading(true);
-        try {       
+        try {  
+            const res = await axios.post(`${ApiUrl}/api/v1/user/login`, formData);
+            const status = res.data;     
             if (status) {
                 Swal.fire({
                     text: '登入成功!',
                     icon: 'success',
                 })
-            }
-            setIsLoading(false);
+            }    
         } catch (error) {
             const {message} = error.response.data;
             if(error instanceof Error){
@@ -35,9 +35,8 @@ function LoginForm() {
                     icon: 'error',
                   })
              }
-            setIsLoading(true);
         }
-        
+        setIsLoading(false);
         
     }
     return (

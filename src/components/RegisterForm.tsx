@@ -41,8 +41,7 @@ function RegisterForm() {
                     text: '註冊成功!',
                     icon: 'success',
                   })
-            }
-            setIsLoading(false);
+            } 
         } catch (error) {
              const {message} = error.response.data;
              if(error instanceof Error){
@@ -52,8 +51,8 @@ function RegisterForm() {
                     icon: 'error',
                   })
              }
-             setIsLoading(false);
         }
+        setIsLoading(false);
     }
     useEffect(() => {
         (async () => {
