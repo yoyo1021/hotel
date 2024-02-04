@@ -9,7 +9,7 @@ function RegisterForm() {
     const step1 = useRef<HTMLHeadingElement>(null);
     const stepCompleted = useRef<HTMLElement>(null);
     const stepperItem2 = useRef<HTMLLIElement>(null);
-    const [addressData, setAddressData] = useState([]);
+    const [addressData, setAddressData] = useState<string[]>([]);
     const [chosenCity, setChosenCity] = useState('');
     const [_,setZipCode] = useState('');
 
@@ -32,7 +32,7 @@ function RegisterForm() {
     }
     useEffect(() => {
         (async () => {
-            const result = await axios.get('./src/assets/taiwan.json')
+            const result = await axios.get('https://yoyo1021.github.io/hotel/assets/taiwan.json')
             //console.log(result);
             setAddressData(result.data);
         })();
@@ -45,7 +45,7 @@ function RegisterForm() {
         stepCompleted.current?.classList.add('d-flex');
         formStep2.current?.classList.remove('d-none');
         formStep2.current?.classList.add('d-block');
-        stepperItem2.current?.classList.add('active');
+        stepperItem2.current?.classList.add('active'); 
     }
 
     function PrevStep(){
@@ -90,7 +90,7 @@ function RegisterForm() {
                                     message: 'Email 格式不正確',
                                 },
                             })}/>
-                            {errors.email && (<div className='invalid-feedback mt-2'>{errors.email?.message}</div>)}
+                            {errors.email && (<div className='invalid-feedback mt-2'>{errors.email?.message?.toString()}</div>)}
                         </div>
                         <div className="mb-3">
                             <label htmlFor="password" className='text-white mb-2'>密碼</label>
@@ -98,7 +98,7 @@ function RegisterForm() {
                              {...register('password',{
                                 required: '密碼必填',
                             })}/>
-                            {errors.password && (<div className='invalid-feedback mt-2'>{errors.password?.message}</div>)}
+                            {errors.password && (<div className='invalid-feedback mt-2'>{errors.password?.message?.toString()}</div>)}
                         </div>
                         <div className="mb-5">
                             <label htmlFor="checked" className='text-white mb-2'>確認密碼</label>
@@ -109,7 +109,7 @@ function RegisterForm() {
                                     return match === password || '與密碼不符合'
                                 }
                             })}/>
-                            {errors.checked && (<div className='invalid-feedback mt-2'>{errors.checked?.message}</div>)}
+                            {errors.checked && (<div className='invalid-feedback mt-2'>{errors.checked?.message?.toString()}</div>)}
                         </div>
                         <button type='button' className='btn w-100 py-3 rounded mb-3 btn-login' style={{ background: 'white' }} onClick={() => { nextStep() }}>下一步</button>
                     </div>
@@ -120,7 +120,7 @@ function RegisterForm() {
                             {...register('name',{
                                 required:'姓名必填'
                             })}/>
-                            {errors.name && (<div className='invalid-feedback mt-2'>{errors.name?.message}</div>)}
+                            {errors.name && (<div className='invalid-feedback mt-2'>{errors.name?.message?.toString()}</div>)}
                         </div>
                         <div className="mb-3">
                             <label htmlFor="phone" className='text-white mb-2'>手機號碼</label>
@@ -132,7 +132,7 @@ function RegisterForm() {
                                     message: '手機號碼為10碼',
                                   },
                             })}/>
-                            {errors.phone && (<div className='invalid-feedback mt-2'>{errors.phone?.message}</div>)}
+                            {errors.phone && (<div className='invalid-feedback mt-2'>{errors.phone?.message?.toString()}</div>)}
                         </div>
                         <div className="mb-3">
                             <label htmlFor="birthday" className='text-white mb-2'>生日</label>
@@ -140,7 +140,7 @@ function RegisterForm() {
                             {...register('birthday',{
                                 required:'請選擇生日'
                             })}/>
-                            {errors.birthday && (<div className='invalid-feedback mt-2'>{errors.birthday?.message}</div>)}
+                            {errors.birthday && (<div className='invalid-feedback mt-2'>{errors.birthday?.message?.toString()}</div>)}
                         </div>
                         <div className="mb-3">
                             <label htmlFor="address" className='text-white mb-2'>地址</label>
@@ -153,13 +153,13 @@ function RegisterForm() {
                                         onChange={(e) => setChosenCity(e.target.value)}
                                     >
                                         <option value="">請選擇縣市</option>
-                                        {addressData.map((city) => {
+                                        {addressData.map((city:any) => {
                                             return (
-                                                <option value={city.CityName} key={city.CityEngName}>{city.CityName}</option>
+                                                <option value={city['CityName']} key={city['CityEngName']}>{city['CityName']}</option>
                                             )
                                         })}
                                     </select>
-                                    {errors.city && (<div className='invalid-feedback mt-2'>{errors.city?.message}</div>)}
+                                    {errors.city && (<div className='invalid-feedback mt-2'>{errors.city?.message?.toString()}</div>)}
                                 </div>
                                 <div className="col-6">
                                     <select className={`form-select rounded ${errors.zipcode?'is-invalid':''}`} id="zipcode" disabled={!chosenCity} 
@@ -169,11 +169,11 @@ function RegisterForm() {
                                         onChange={(e)=>setZipCode(e.target.value)}
                                     >
                                         <option value="">請選擇鄉鎮市區</option>
-                                        {addressData.find((city) => city.CityName === chosenCity)?.AreaList?.map((area) => {
+                                        {/* {addressData.find((city:any) => city.CityName === chosenCity)?.AreaList.map((area:any) => {
                                             return <option value={area.ZipCode} key={area.AreaName}>{area.AreaName}</option>
-                                        })}
+                                        })} */}
                                     </select>
-                                    {errors.zipcode && (<div className='invalid-feedback mt-2'>{errors.zipcode?.message}</div>)}
+                                    {errors.zipcode && (<div className='invalid-feedback mt-2'>{errors.zipcode?.message?.toString()}</div>)}
                                 </div>
                             </div>
                             <input type="text" id="detail" className={`form-control rounded ${errors.detail?'is-invalid':''}`}
@@ -182,7 +182,7 @@ function RegisterForm() {
                                 })}
                                 placeholder="請輸入詳細地址"
                                 />
-                            {errors.detail && (<div className='invalid-feedback mt-2'>{errors.detail?.message}</div>)}
+                            {errors.detail && (<div className='invalid-feedback mt-2'>{errors.detail?.message?.toString()}</div>)}
                         </div>
                         <div className="mb-5">
                             <input type="checkbox" id="agree" className={`form-check-input me-2 ${errors.agree?'is-invalid':''}`}
@@ -190,7 +190,7 @@ function RegisterForm() {
                                 required:'請同意本網站個資使用規範'
                             })}/>
                             <label htmlFor="agree" className="text-white">我已閱讀並同意本網站個資使用規範</label>
-                            {errors.agree && (<div className='invalid-feedback mt-2'>{errors.agree?.message}</div>)}
+                            {errors.agree && (<div className='invalid-feedback mt-2'>{errors.agree?.message?.toString()}</div>)}
                         </div>
                         <button type='button' className='btn w-100 py-3 rounded mb-3 btn-login' style={{ background: 'white' }} onClick={()=>PrevStep()}>上一步</button>
                         <button type='submit' className='btn w-100 py-3 rounded mb-3 btn-login' style={{ background: 'white' }} disabled={!isValid}>完成註冊</button>
