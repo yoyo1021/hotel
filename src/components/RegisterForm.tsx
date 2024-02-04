@@ -3,6 +3,9 @@ import { NavLink } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import "bootstrap-icons/font/bootstrap-icons.css";
+import Loading from "./Loading";
+import Swal from 'sweetalert2';
+
 function RegisterForm() {
     const formStep1 = useRef<HTMLDivElement>(null);
     const formStep2 = useRef<HTMLDivElement>(null);
@@ -12,23 +15,45 @@ function RegisterForm() {
     const [addressData, setAddressData] = useState<string[]>([]);
     const [chosenCity, setChosenCity] = useState('');
     const [_,setZipCode] = useState('');
+    const [isLoading,setIsLoading] = useState<boolean>(false)
+    const ApiUrl:string = 'https://hotel-service-center.onrender.com';
 
     const { register,handleSubmit,getValues,formState:{errors,isValid}} = useForm({mode:'onTouched'})
-    const onSubmit = (data:any)=>{
-        const { name,email,password,zipcode,detail }= data;
-        const formData = {
-            'data':{
-                name,
-                email,
-                password,
-                'address':{
-                    zipcode,
-                    detail
+    const onSubmit = async(data:any)=>{
+        const { name,email,password,phone,birthday,zipcode,detail }= data;
+        const formData = { 
+                name:name,
+                email:email,
+                password:password,
+                phone:phone,
+                birthday:new Date(birthday).toLocaleDateString(),
+                address:{
+                    zipcode:Number(zipcode),
+                    detail:detail
                 }
-            }
         }
-        console.log(formData);
-
+        setIsLoading(true);
+        try {
+            const res = await axios.post(`${ApiUrl}/api/v1/user/signup`,formData);
+            const {status} = res;
+            if(status){
+                Swal.fire({
+                    text: '註冊成功!',
+                    icon: 'success',
+                  })
+            }
+            setIsLoading(false);
+        } catch (error) {
+             const {message} = error.response.data;
+             if(error instanceof Error){
+                Swal.fire({
+                    title: '註冊失敗!',
+                    text: message,
+                    icon: 'error',
+                  })
+             }
+             setIsLoading(false);
+        }
     }
     useEffect(() => {
         (async () => {
@@ -61,6 +86,7 @@ function RegisterForm() {
     return (
         <>
             <div className='loginForm'>
+                <Loading  isLoading = {isLoading}/>
                 <div className="mb-5">
                     <p className='text-primary mb-2'>享樂酒店，誠摯歡迎</p>
                     <h1 className='text-white fw-bold'>立即註冊</h1>
@@ -169,9 +195,9 @@ function RegisterForm() {
                                         onChange={(e)=>setZipCode(e.target.value)}
                                     >
                                         <option value="">請選擇鄉鎮市區</option>
-                                        {/* {addressData.find((city:any) => city.CityName === chosenCity)?.AreaList.map((area:any) => {
+                                        {addressData.find((city:any) => city.CityName === chosenCity)?.AreaList.map((area:any) => {
                                             return <option value={area.ZipCode} key={area.AreaName}>{area.AreaName}</option>
-                                        })} */}
+                                        })}
                                     </select>
                                     {errors.zipcode && (<div className='invalid-feedback mt-2'>{errors.zipcode?.message?.toString()}</div>)}
                                 </div>
