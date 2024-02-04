@@ -26,9 +26,9 @@ function LoginForm() {
                     icon: 'success',
                 })
             }    
-        } catch (error) {
-            const {message} = error.response.data;
-            if(error instanceof Error){
+        } catch (error) { 
+            if(axios.isAxiosError(error) && error.response){
+                const {message} = error.response.data;
                 Swal.fire({
                     title: '登入失敗!',
                     text: message,
