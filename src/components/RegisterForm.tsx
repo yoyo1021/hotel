@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import axios from "axios";
@@ -13,7 +13,7 @@ function RegisterForm() {
     const step1 = useRef<HTMLHeadingElement>(null);
     const stepCompleted = useRef<HTMLElement>(null);
     const stepperItem2 = useRef<HTMLLIElement>(null);
-    const [addressData, setAddressData] = useState(taiwan);
+    const [addressData] = useState(taiwan);
     const [chosenCity, setChosenCity] = useState('');
     const [_, setZipCode] = useState('');
     const [isLoading, setIsLoading] = useState<boolean>(false)
