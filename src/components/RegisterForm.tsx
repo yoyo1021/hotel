@@ -54,8 +54,8 @@ function RegisterForm() {
     }
     useEffect(() => {
         (async () => {
-            const result = await axios.get('src/assets/taiwan.json');
-            console.log(result);
+            const result = await axios.get('/src/assets/taiwan.json');
+            //console.log(result);
             setAddressData(result.data);
         })();
     }, [])
